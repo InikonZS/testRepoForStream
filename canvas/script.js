@@ -39,9 +39,12 @@ function onRender(deltaTime){
     context.lineTo(x * 200 + context.canvas.width/2, y * 200 + context.canvas.height/2);*/
     
   //} 
-  context.fillStyle = '#00000095';
+  context.fillStyle = '#00000015';
   context.fillRect(0, 0 , context.canvas.width, context.canvas.height);
-  renderCube(context, deltaTime);
+  renderCube(context, deltaTime, transform);
+  renderCube(context, deltaTime, (vertex, dt)=>{
+    return vertex.add(new Vector(2,2,1)).scale(new Vector(100,100,100)).rotateY(dt / 1200).rotateX(dt / 3400).add(new Vector(200, 200, 0));
+  });
   //context.stroke();
   //context.closePath();
  
@@ -95,7 +98,7 @@ class Vector{
   }
 }
 
-function renderCube(context, deltaTime){
+function renderCube(context, deltaTime, transform){
   const vertexList = [
     new Vector(0,0,0),
     new Vector(0,1,0),
@@ -114,15 +117,15 @@ function renderCube(context, deltaTime){
     2, 3,
     3, 0,
 
+    4, 5,
     5, 6,
     6, 7,
-    7, 8,
-    8, 5,
+    7, 4,
 
-    0, 5,
-    1, 6,
-    2, 7,
-    3, 8,
+    0, 4,
+    1, 5,
+    2, 6,
+    3, 7,
   ]
 
   //primotive format - line 2
@@ -137,9 +140,10 @@ function renderCube(context, deltaTime){
     context.fillRect(it.x-sz, it.y-sz, sz*2, sz*2);
   });
 
-/*  indexList.forEach((ind, i, ar)=>{
+  indexList.forEach((ind, i, ar)=>{
     if (i % 2 == 0){
-    let va = [transformed[ar[i]], transformed[ar[i+1]]]  
+      
+    let va = [transformed[ar[i]], transformed[ar[i+1]]];
     context.beginPath();
     context.strokeStyle = '#f00';
     context.lineWidht = 3;
@@ -152,7 +156,7 @@ function renderCube(context, deltaTime){
     //context.fillStyle = '#fff';
     //context.fillRect(it.x-sz, it.y-sz, sz*2, sz*2);
     }
-  });*/
+  });
 }
 
 function transform(vertex, dt){
